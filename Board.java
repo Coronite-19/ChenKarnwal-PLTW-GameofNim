@@ -10,7 +10,7 @@ public class Board {
     }
     
     public static void populate() {
-        // Initial setup - required by GameRunner but not used in our implementation
+        // Initial setup and required by GameRunner to run
         System.out.println("Setting up the game board...");
     }
     
