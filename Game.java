@@ -18,7 +18,7 @@ public class Game {
     private void initialize() {
         players = new Player[2];
         
-        System.out.println("\nPlayer 1, enter your name: ");
+        System.out.println("\nPlayer 1, enter your name (or type computer followed by any character for autoplay): ");
         players[0] = new Player(scanner.nextLine(), false);
         
         System.out.println("Would you like to play against computer? (y/n): ");
@@ -27,7 +27,7 @@ public class Game {
         if (vsComputer) {
             players[1] = new Player("Computer", true);
         } else {
-            System.out.println("Player 2, enter your name: ");
+            System.out.println("Player 2, enter your name (or type computer followed by any character for autoplay): ");
             players[1] = new Player(scanner.nextLine(), false);
         }
         

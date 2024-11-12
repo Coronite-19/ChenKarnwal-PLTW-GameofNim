@@ -71,7 +71,6 @@ public class Player {
         return 1; // If no larger target found, aim for 1
     }
 
-    // Rest of the Player class methods remain the same...
     public String getName() { return name; }
     public int getPoints() { return points; }
     public void addPoints(int points) { this.points += points; }
