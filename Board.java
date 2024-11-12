@@ -39,6 +39,11 @@ public class Board {
         pileSize -= amount;
         return true;
     }
+
+    public boolean addPieces(int amount) {
+        pileSize += amount;
+        return true;
+    }
     
     public boolean isEmpty() {
         return pileSize == 0;
