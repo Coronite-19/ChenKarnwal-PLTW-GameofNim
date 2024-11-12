@@ -21,18 +21,18 @@ public class Game {
         players = new Player[2];    // Create an array to hold two players
         
         // Get Player 1 details
-        System.out.println("\nPlayer 1, enter your name (or type computer1 for autoplay): ");
+        System.out.println("\nPlayer 1, enter your name (or type computer1 for smart AI): ");
         players[0] = new Player(scanner.nextLine(), false);
         
         // Ask if player wants to play against the computer
-        System.out.println("Would you like to play against computer? (y/n): ");
+        System.out.println("Would you like to play against another computer? (y/n): ");
         boolean vsComputer = scanner.nextLine().trim().toLowerCase().startsWith("y");
         
         // Initialize Player 2 as either computer or another human
         if (vsComputer) {
             players[1] = new Player("Computer", true);
         } else {
-            System.out.println("Player 2, enter your name (or type computer2 for autoplay): ");
+            System.out.println("Player 2, enter your name: ");
             players[1] = new Player(scanner.nextLine(), false);
         }
         
