@@ -21,7 +21,7 @@ public class Game {
         players = new Player[2];    // Create an array to hold two players
         
         // Get Player 1 details
-        System.out.println("\nPlayer 1, enter your name (or type computer1 for smart AI): ");
+        System.out.println("\nPlayer 1, enter your name: ");
         players[0] = new Player(scanner.nextLine(), false);
         
         // Ask if player wants to play against the computer
