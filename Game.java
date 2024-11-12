@@ -4,50 +4,57 @@ import java.util.Scanner;
  * Main game class that controls game flow
  */
 public class Game {
-    private Player[] players;
-    private Board gameBoard;
-    private boolean isGameActive;
-    private int currentPlayerIndex;
-    private Scanner scanner;
+    private Player[] players;           // Array to hold player objects
+    private Board gameBoard;            // The board object managing the pile of pieces
+    private boolean isGameActive;       // Flag to keep track of game status
+    private int currentPlayerIndex;     // Tracks the index of the current player
+    private Scanner scanner;            // Scanner for user input
 
+    // Constructor initializes the game and sets up players
     public Game() {
         scanner = new Scanner(System.in);
         initialize();
     }
 
+    // Sets up players, game board, and randomly selects the first player
     private void initialize() {
-        players = new Player[2];
+        players = new Player[2];    // Create an array to hold two players
         
-        System.out.println("\nPlayer 1, enter your name (or type computer followed by any character for autoplay): ");
+        // Get Player 1 details
+        System.out.println("\nPlayer 1, enter your name (or type computer1 for autoplay): ");
         players[0] = new Player(scanner.nextLine(), false);
         
+        // Ask if player wants to play against the computer
         System.out.println("Would you like to play against computer? (y/n): ");
         boolean vsComputer = scanner.nextLine().trim().toLowerCase().startsWith("y");
         
+        // Initialize Player 2 as either computer or another human
         if (vsComputer) {
             players[1] = new Player("Computer", true);
         } else {
-            System.out.println("Player 2, enter your name (or type computer followed by any character for autoplay): ");
+            System.out.println("Player 2, enter your name (or type computer2 for autoplay): ");
             players[1] = new Player(scanner.nextLine(), false);
         }
         
-        gameBoard = new Board();
-        currentPlayerIndex = (int)(Math.random() * 2);  // Randomly choose first player
+        gameBoard = new Board();    // Initialize game board with initial pile size
+        currentPlayerIndex = (int)(Math.random() * 2);  // Randomly choose who starts first
     }
 
+    // Main method to control the gameplay loop
     public void play() {
         do {
-            playOneGame();
-        } while (playAgain());
+            playOneGame();      // Plays a single game
+        } while (playAgain());  // Asks if players want to play again
         
-        announceGameResults();
+        announceGameResults();  // Displays final results after all games are done
     }
 
+    // Manages the flow of a single game
     private void playOneGame() {
         isGameActive = true;
-        gameBoard.randomizePileSize();
+        gameBoard.randomizePileSize();  // Sets up a random pile size for the game
         
-        // Assign new power-ups for each game
+        // Assigns a new random power-up to each player at the start of each game
         for (Player player : players) {
             player.assignRandomPowerUp();
         }
@@ -55,7 +62,7 @@ public class Game {
         System.out.println("\nStarting new game with " + gameBoard.getPileSize() + " pieces");
         System.out.println(players[currentPlayerIndex].getName() + " goes first!");
         
-        // Show power-ups to players
+        // Display power-ups for non-computer players
         for (Player player : players) {
             if (!player.isComputer()) {
                 System.out.println(player.getName() + " received power-up: " + 
@@ -64,38 +71,43 @@ public class Game {
             }
         }
         
+        // Loop until the game ends
         while (isGameActive) {
-            gameBoard.displayBoard();
-            takeTurn();
+            gameBoard.displayBoard();    // Display current pile status
+            takeTurn();                  // Handle current player's turn
             
-            if (gameBoard.isEmpty()) {
-                handleGameEnd();
+            if (gameBoard.isEmpty()) {   // Check if the pile is empty after the turn
+                handleGameEnd();         // End the game if no pieces are left
             } else {
-                switchPlayer();
+                switchPlayer();          // Move to the next player's turn
             }
         }
     }
 
+    // Handles a single turn for the current player
     private void takeTurn() {
         Player currentPlayer = players[currentPlayerIndex];
         System.out.println("\n" + currentPlayer.getName() + "'s turn");
         
-        // Show power-up option if available
+        // Allow player to use their power-up if available
         if (currentPlayer.hasPowerUp()) {
             handlePowerUpOption(currentPlayer);
         }
 
         int pieces;
         if (currentPlayer.isComputer()) {
+            // For AI players, use computerMove() to determine the number of pieces to take
             pieces = currentPlayer.computerMove(gameBoard.getPileSize());
             System.out.println("Computer takes " + pieces + " pieces");
         } else {
+            // For human players, ask for a valid move
             pieces = getValidPlayerMove();
         }
         
-        gameBoard.removePieces(pieces);
+        gameBoard.removePieces(pieces);  // Update board after pieces are taken
     }
 
+    // Prompts human player for a valid move within allowed limits
     private int getValidPlayerMove() {
         int pieces;
         do {
@@ -106,8 +118,9 @@ public class Game {
                 scanner.next();
             }
             pieces = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); // Consume newline character
             
+            // Check if the move is valid
             if (!gameBoard.checkMoveValid(pieces)) {
                 System.out.println("Invalid move! Please try again.");
             }
@@ -116,6 +129,7 @@ public class Game {
         return pieces;
     }
 
+    // Handles the player's choice to use their power-up during their turn
     private void handlePowerUpOption(Player player) {
         System.out.println("\nYou have a " + player.getCurrentPowerUp().getName() + 
                           " power-up available!");
@@ -127,6 +141,7 @@ public class Game {
         }
     }
 
+    // Executes the chosen power-up action
     private void executePowerUp(Player player) {
         switch (player.getCurrentPowerUp()) {
             case DOUBLE_TURN:
@@ -136,15 +151,17 @@ public class Game {
                 handleAddPieces(player);
                 break;
         }
-        player.usePowerUp();
+        player.usePowerUp(); // Mark power-up as used
     }
 
+    // Executes the DOUBLE_TURN power-up, giving the player an extra turn
     private void handleDoubleTurn(Player player) {
         System.out.println("\n*** DOUBLE TURN ACTIVATED! ***");
         System.out.println(player.getName() + " will get another turn!");
         currentPlayerIndex = (currentPlayerIndex - 1 + players.length) % players.length;
     }
 
+    // Executes the ADD_PIECES power-up, adding pieces back to the pile
     private void handleAddPieces(Player player) {
         System.out.println("\n*** ADD PIECES ACTIVATED! ***");
         int maxAdd = 5;
@@ -158,32 +175,34 @@ public class Game {
                 scanner.next();
             }
             piecesToAdd = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); // Consume newline character
         } while (piecesToAdd < minAdd || piecesToAdd > maxAdd);
         
-        gameBoard.addPieces(piecesToAdd);
+        gameBoard.addPieces(piecesToAdd); // Add pieces to the pile
         System.out.println(piecesToAdd + " pieces added to the pile!");
     }
 
+    // Handles the end of a game round when the pile is empty
     private void handleGameEnd() {
         isGameActive = false;
-        // Current player loses (took last piece)
-        int winnerIndex = (currentPlayerIndex + 1) % 2;
-        players[winnerIndex].addPoints(1);
+        int winnerIndex = (currentPlayerIndex + 1) % 2; // The other player wins
+        players[winnerIndex].addPoints(1);              // Add a point to the winner's score
         
         System.out.println("\n" + players[winnerIndex].getName() + " wins!");
     }
 
+    // Switches the turn to the other player
     private void switchPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-        
     }
 
+    // Asks the players if they would like to play another game
     private boolean playAgain() {
         System.out.println("\nWould you like to play again? (y/n): ");
         return scanner.nextLine().trim().toLowerCase().startsWith("y");
     }
 
+    // Displays the final scores of all players
     private void announceGameResults() {
         System.out.println("\nFinal Scores:");
         for (Player player : players) {
