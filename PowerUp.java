@@ -1,5 +1,6 @@
 /**
  * Represents available power-ups in the game
+ * enum is a special class that represents a group of constants (unchangeable variables)
  */
 
  enum PowerUp {
