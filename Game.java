@@ -18,26 +18,31 @@ public class Game {
 
     // Sets up players, game board, and randomly selects the first player
     private void initialize() {
-        players = new Player[2];    // Create an array to hold two players
+        players = new Player[2];
         
-        // Get Player 1 details
         System.out.println("\nPlayer 1, enter your name: ");
-        players[0] = new Player(scanner.nextLine(), false);
+        String player1Name = scanner.nextLine();
+        players[0] = new Player(player1Name, false);
         
-        // Ask if player wants to play against the computer
-        System.out.println("Would you like to play against another computer? (y/n): ");
-        boolean vsComputer = scanner.nextLine().trim().toLowerCase().startsWith("y");
-        
-        // Initialize Player 2 as either computer or another human
-        if (vsComputer) {
-            players[1] = new Player("Computer", true);
+        // If player1 is Computer1, automatically set player2 as Computer2
+        if (player1Name.toLowerCase().contains("computer1")) {
+            players[1] = new Player("computer2", true);
+            System.out.println("Auto-setting Player 2 as computer2");
         } else {
-            System.out.println("Player 2, enter your name: ");
-            players[1] = new Player(scanner.nextLine(), false);
+            // Regular flow for human players
+            System.out.println("Would you like to play against computer? (y/n): ");
+            boolean vsComputer = scanner.nextLine().trim().toLowerCase().startsWith("y");
+            
+            if (vsComputer) {
+                players[1] = new Player("computer", true);
+            } else {
+                System.out.println("Player 2, enter your name: ");
+                players[1] = new Player(scanner.nextLine(), false);
+            }
         }
         
-        gameBoard = new Board();    // Initialize game board with initial pile size
-        currentPlayerIndex = (int)(Math.random() * 2);  // Randomly choose who starts first
+        gameBoard = new Board();
+        currentPlayerIndex = (int)(Math.random() * 2);
     }
 
     // Main method to control the gameplay loop
