@@ -19,6 +19,8 @@ public class Game {
     // Sets up players, game board, and randomly selects the first player
     private void initialize() {
         players = new Player[2];
+        gameBoard = new Board();  // Add this line to create the game board
+        Random random = new Random();
         
         System.out.println("\nPlayer 1, enter your name: ");
         String player1Name = scanner.nextLine();
@@ -40,9 +42,16 @@ public class Game {
                 players[1] = new Player(scanner.nextLine(), false);
             }
         }
-        
-        gameBoard = new Board();
-        currentPlayerIndex = (int)(Math.random() * 2);
+    
+        // Randomly swap players to randomize who goes first
+        if (random.nextBoolean()) {
+            Player temp = players[0];
+            players[0] = players[1];
+            players[1] = temp;
+            System.out.println("\n" + players[0].getName() + " will go first!");
+        } else {
+            System.out.println("\n" + players[0].getName() + " will go first!");
+        }
     }
 
     // Main method to control the gameplay loop
