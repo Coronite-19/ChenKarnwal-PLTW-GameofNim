@@ -25,12 +25,11 @@ public class Player {
     }
 
     /**
+     * We found the optimal Nim strategy with help of web search and ChatGPT
      * Determines the move for a computer player based on the pile size.
-     * 
      * Strategic computers use an optimal Nim strategy:
      * The goal is to leave a pile size that is one less than a power of 2 (3, 7, 15, etc.)
      * Non-strategic computers choose a random legal move
-     * 
      * @param pileSize The current pile size
      * @return The number of pieces to take from the pile
      */
