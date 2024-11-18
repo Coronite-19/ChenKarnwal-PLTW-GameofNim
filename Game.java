@@ -16,35 +16,40 @@ public class Game {
         initialize();
     }
 
-    // Sets up players, game board, and randomly selects the first player
-    private void initialize() {
-        players = new Player[2];
-        
-        System.out.println("\nPlayer 1, enter your name: ");
-        String player1Name = scanner.nextLine();
-        players[0] = new Player(player1Name, false);
-        
-        // If player1 is Computer1, automatically set player2 as Computer2
-        if (player1Name.toLowerCase().contains("computer1")) {
-            players[1] = new Player("computer2", true);
-            System.out.println("Auto-setting Player 2 as computer2");
-        } else {
-            // Regular flow for human players
-            System.out.println("Would you like to play against computer? (y/n): ");
-            boolean vsComputer = scanner.nextLine().trim().toLowerCase().startsWith("y");
-            
-            if (vsComputer) {
-                players[1] = new Player("computer", true);
-            } else {
-                System.out.println("Player 2, enter your name: ");
-                players[1] = new Player(scanner.nextLine(), false);
-            }
-        }
-        
-        gameBoard = new Board();
-        currentPlayerIndex = (int)(Math.random() * 2);
+  // Sets up players, game board, and randomly selects the first player
+  private void initialize() {
+    players = new Player[2];
+    
+    // Get player names first
+    System.out.println("\nPlayer 1, enter your name: ");
+    String player1Name = scanner.nextLine();
+    
+    System.out.println("Would you like to play against computer? (y/n): ");
+    boolean vsComputer = scanner.nextLine().trim().toLowerCase().startsWith("y");
+    
+    String player2Name;
+    boolean player2IsComputer = false;
+    if (vsComputer) {
+        player2Name = "computer";
+        player2IsComputer = true;
+    } else {
+        System.out.println("Player 2, enter your name: ");
+        player2Name = scanner.nextLine();
     }
-
+    
+    // Randomly determine player order
+    if (Math.random() < 0.5) {
+        players[0] = new Player(player1Name, false);
+        players[1] = new Player(player2Name, player2IsComputer);
+        currentPlayerIndex = 0;
+    } else {
+        players[0] = new Player(player2Name, player2IsComputer);
+        players[1] = new Player(player1Name, false);
+        currentPlayerIndex = 0;
+    }
+    
+    gameBoard = new Board();
+}
     // Main method to control the gameplay loop
     public void play() {
         do {
