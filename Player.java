@@ -21,10 +21,8 @@ public class Player {
     }
 
     /**
-     * We found the optimal Nim strategy with help of web search and ChatGPT
      * Determines the move for a computer player based on the pile size.
      * Computer players choose a random legal move.
-     * 
      * @param pileSize The current pile size
      * @return The number of pieces to take from the pile
      */
