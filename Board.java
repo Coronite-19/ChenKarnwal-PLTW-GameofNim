@@ -12,6 +12,7 @@ public class Board {
     public static void populate() {
         // Initial setup method required by GameRunner to start the game
         System.out.println("Setting up the game board...");
+        System.out.println("To see computer vs. computer gameplay, type your name as computer.");
     }
     
     /**
